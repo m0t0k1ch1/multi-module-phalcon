@@ -1,42 +1,63 @@
 <?php
-use Phalcon\Di\FactoryDefault;
+
+use \Phalcon\Di\FactoryDefault;
+use \Phalcon\Loader;
+use \Phalcon\Mvc\Router;
 
 error_reporting(E_ALL);
 
 define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+define('APP_PATH', BASE_PATH . '/apps');
+
+$di = new FactoryDefault;
+
+$di->set('router', function() {
+    return include APP_PATH . '/routes.php';
+});
 
 try {
+    $router = $di['router'];
+    $router->handle();
 
-    /**
-     * The FactoryDefault Dependency Injector automatically registers
-     * the services that provide a full stack framework.
-     */
-    $di = new FactoryDefault();
+    $moduleName = $router->getModuleName();
+    if ($moduleName == 'frontend') {
+        require_once APP_PATH . '/frontend/Module.php';
+        $module = new \Multi\Frontend\Module;
+    }
+    else if ($moduleName == 'backend') {
+        require_once APP_PATH . '/backend/Module.php';
+        $module = new \Multi\Backend\Module;
+    }
+    else {
+        throw new \RuntimeException('unknown module');
+    }
 
-    /**
-     * Read services
-     */
-    include APP_PATH . "/config/services.php";
+    $module->registerAutoloaders($di);
+    $module->registerServices($di);
 
-    /**
-     * Get config service for use in inline setup below
-     */
-    $config = $di->getConfig();
+    $dispatcher = $di['dispatcher'];
+    $dispatcher->setModuleName($router->getModuleName());
+    $dispatcher->setControllerName($router->getControllerName());
+    $dispatcher->setActionName($router->getActionName());
+    $dispatcher->setParams($router->getParams());
 
-    /**
-     * Include Autoloader
-     */
-    include APP_PATH . '/config/loader.php';
+    $dispatcher->dispatch();
 
-    /**
-     * Handle the request
-     */
-    $application = new \Phalcon\Mvc\Application($di);
+    if ($moduleName == 'frontend') {
+        $view = $di['view'];
+        $view->start();
+        $view->render(
+            $dispatcher->getControllerName(),
+            $dispatcher->getActionName(),
+            $dispatcher->getParams()
+        );
+        $view->finish();
 
-    echo $application->handle()->getContent();
-
-} catch (\Exception $e) {
-    echo $e->getMessage() . '<br>';
-    echo '<pre>' . $e->getTraceAsString() . '</pre>';
+        $response = $di['response'];
+        $response->setContent($view->getContent());
+        $response->send();
+    }
+}
+catch (\Exception $e) {
+    echo $e;
 }
