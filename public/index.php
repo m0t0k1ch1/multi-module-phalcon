@@ -20,15 +20,16 @@ try {
     $router->handle();
 
     $moduleName = $router->getModuleName();
-    if ($moduleName == 'frontend') {
+    switch ($moduleName) {
+    case 'frontend':
         require_once APP_PATH . '/frontend/Module.php';
         $module = new \Multi\Frontend\Module;
-    }
-    else if ($moduleName == 'backend') {
+        break;
+    case 'backend':
         require_once APP_PATH . '/backend/Module.php';
         $module = new \Multi\Backend\Module;
-    }
-    else {
+        break;
+    default:
         throw new \RuntimeException('unknown module');
     }
 
@@ -36,7 +37,7 @@ try {
     $module->registerServices($di);
 
     $dispatcher = $di['dispatcher'];
-    $dispatcher->setModuleName($router->getModuleName());
+    $dispatcher->setModuleName($moduleName);
     $dispatcher->setControllerName($router->getControllerName());
     $dispatcher->setActionName($router->getActionName());
     $dispatcher->setParams($router->getParams());
