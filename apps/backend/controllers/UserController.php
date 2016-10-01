@@ -23,11 +23,11 @@ class UserController extends ControllerBase
 
         $v = new \Multi\Backend\Validations\SignupValidation;
 
-        // $messages = $v->validate($params);
-        // if (count($messages) > 0) {
-        //     $this->sendMessages($messages);
-        //     return;
-        // }
+        $messages = $v->validate($params);
+        if (count($messages) > 0) {
+            $this->sendMessages($messages);
+            return;
+        }
 
         $userModel = new UserModel;
         $userModel->name  = $params['name'];
