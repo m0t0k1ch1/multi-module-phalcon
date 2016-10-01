@@ -11,9 +11,7 @@ class UserModel extends ModelBase
 
     public static function firstByEmail($email)
     {
-        $criteria = self::query();
-
-        return $criteria
+        return self::query()
             ->where('email = :email:', ['email' => $email])
             ->limit(1)
             ->execute()
