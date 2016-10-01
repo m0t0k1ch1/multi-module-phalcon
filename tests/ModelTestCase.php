@@ -16,6 +16,8 @@ abstract class ModelTestCase extends \Phalcon\Test\ModelTestCase
             ],
         ];
         $this->setDb();
+
+        $this->truncateAll();
     }
 
     public function tearDown()
@@ -26,5 +28,15 @@ abstract class ModelTestCase extends \Phalcon\Test\ModelTestCase
     public function truncateAll()
     {
         $this->truncateTable('user');
+    }
+
+    public function insertRows($table, $rows = [])
+    {
+        $db = $this->di->get('db');
+
+        foreach ($rows as $row) {
+            $sql = "INSERT INTO ${table} VALUES (${row})";
+            $db->execute($sql);
+        }
     }
 }
