@@ -5,6 +5,7 @@ namespace Multi\Backend;
 use \Phalcon\DiInterface;
 use \Phalcon\Loader;
 use \Phalcon\Mvc\Dispatcher;
+use \Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use \Phalcon\Mvc\ModuleDefinitionInterface;
 
 class Module implements ModuleDefinitionInterface
@@ -14,6 +15,7 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader;
         $loader->registerNamespaces([
             'Multi\Backend\Controllers' => APP_PATH . '/backend/controllers/',
+            'Multi\Backend\Models'      => APP_PATH . '/backend/models',
         ]);
         $loader->register();
     }
@@ -31,6 +33,17 @@ class Module implements ModuleDefinitionInterface
             $dispatcher->setDefaultNamespace('Multi\Backend\Controllers');
 
             return $dispatcher;
+        });
+
+        $di->setShared('db', function() use($config) {
+            $dbConfig = $config->database->toArray();
+            $dbClass  = '\Phalcon\Db\Adapter\Pdo\\' . $dbConfig['adapter'];
+            unset($dbConfig['adapter']);
+            return new $dbClass($dbConfig);
+        });
+
+        $di->setShared('modelsMetadata', function() {
+            return new MetaDataAdapter();
         });
     }
 }
