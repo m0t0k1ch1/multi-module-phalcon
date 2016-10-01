@@ -9,7 +9,7 @@ abstract class ModelTestCase extends \Phalcon\Test\ModelTestCase
         $di = \Phalcon\Di::getDefault();
         $this->setDi($di);
 
-        $config = $di['config'];
+        $config = $this->di->get('config');
         $this->config = [
             'db' => [
                 'mysql' => $config->database->test->toArray(),
