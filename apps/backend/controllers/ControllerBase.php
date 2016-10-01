@@ -4,7 +4,7 @@ namespace Multi\Backend\Controllers;
 
 class ControllerBase extends \Phalcon\Mvc\Controller
 {
-    protected function sendValidationMessages($messages, $statusCode = 400)
+    protected function sendMessages($messages, $statusCode = 200)
     {
         $body = [];
         foreach ($messages as $message) {
