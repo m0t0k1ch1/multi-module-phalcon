@@ -20,6 +20,7 @@ try {
     $router->handle();
 
     $moduleName = $router->getModuleName();
+
     switch ($moduleName) {
     case 'frontend':
         require_once APP_PATH . '/frontend/Module.php';
@@ -41,8 +42,9 @@ try {
     $dispatcher->setControllerName($router->getControllerName());
     $dispatcher->setActionName($router->getActionName());
     $dispatcher->setParams($router->getParams());
-
     $dispatcher->dispatch();
+
+    $response = $di['response'];
 
     if ($moduleName == 'frontend') {
         $view = $di['view'];
@@ -54,10 +56,10 @@ try {
         );
         $view->finish();
 
-        $response = $di['response'];
         $response->setContent($view->getContent());
-        $response->send();
     }
+
+    $response->send();
 }
 catch (\Exception $e) {
     echo $e;

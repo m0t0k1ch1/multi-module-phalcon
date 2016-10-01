@@ -9,14 +9,13 @@ abstract class ModelTestCase extends \Phalcon\Test\ModelTestCase
         $di = \Phalcon\Di::getDefault();
         $this->setDi($di);
 
-        $config = $this->di->get('config');
+        $config = $this->di['config'];
         $this->config = [
             'db' => [
                 'mysql' => $config->database->test->toArray(),
             ],
         ];
         $this->setDb();
-
         $this->truncateAll();
     }
 
@@ -32,7 +31,7 @@ abstract class ModelTestCase extends \Phalcon\Test\ModelTestCase
 
     public function insertRows($table, $rows = [])
     {
-        $db = $this->di->get('db');
+        $db = $this->di['db'];
 
         foreach ($rows as $row) {
             $sql = "INSERT INTO ${table} VALUES (${row})";

@@ -19,6 +19,7 @@ class UserModelTest extends \ModelTestCase
     public function testFirstByEmail1()
     {
         $user = UserModel::firstByEmail('m0t0k1ch1.310@gmail.com');
+
         $this->assertNotEmpty($user);
         $this->assertEquals($user->id, 1);
         $this->assertEquals($user->name, 'm0t0k1ch1');
@@ -28,6 +29,7 @@ class UserModelTest extends \ModelTestCase
     public function testFirstByEmail2()
     {
         $user = UserModel::firstByEmail('m0t0k1ch2.310@gmail.com');
+
         $this->assertNotEmpty($user);
         $this->assertEquals($user->id, 2);
         $this->assertEquals($user->name, 'm0t0k1ch2');
