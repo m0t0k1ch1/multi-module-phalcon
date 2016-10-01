@@ -33,5 +33,9 @@ class SignupValidation extends \Phalcon\Validation
                 'message' => 'invalid email',
             ])
         );
+        $this->add(
+            'email',
+            new \Multi\Backend\Validators\UniqueUserEmailValidator
+        );
     }
 }

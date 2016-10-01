@@ -8,7 +8,10 @@ class ControllerBase extends \Phalcon\Mvc\Controller
     {
         $body = [];
         foreach ($messages as $message) {
-            $body[] = $message->getMessage();
+            $body[] = [
+                'type' => $message->getType(),
+                'body' => $message->getMessage(),
+            ];
         }
 
         $this->sendJsonResponse([

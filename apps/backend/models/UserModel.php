@@ -8,4 +8,15 @@ class UserModel extends ModelBase
     {
         return 'user';
     }
+
+    public static function firstByEmail($email)
+    {
+        $criteria = self::query();
+
+        return $criteria
+            ->where('email = :email:', ['email' => $email])
+            ->limit(1)
+            ->execute()
+            ->getFirst();
+    }
 }
