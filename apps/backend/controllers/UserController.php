@@ -2,13 +2,18 @@
 
 namespace Multi\Backend\Controllers;
 
+use \Multi\Backend\Models\UserModel;
+
 class UserController extends ControllerBase
 {
     public function getAction()
     {
+        $id = 1;
+
+        $user = UserModel::findFirst($id);
+
         $this->sendJsonResponse([
-            'name'  => 'm0t0k1ch1',
-            'email' => 'm0t0k1ch1.310@gmail.com',
+            'name' => $user->name,
         ]);
     }
 
