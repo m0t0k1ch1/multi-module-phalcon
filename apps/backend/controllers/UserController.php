@@ -16,4 +16,29 @@ class UserController extends ControllerBase
             'name' => $user->name,
         ]);
     }
+
+    public function postAction()
+    {
+        $params = $this->request->getPost();
+
+        $v = new \Multi\Backend\Validations\SignupValidation;
+
+        $messages = $v->validate($params);
+        if (count($messages) > 0) {
+            $this->sendMessages($messages);
+            return;
+        }
+
+        $userModel = new UserModel;
+        $userModel->name  = $params['name'];
+        $userModel->email = $params['email'];
+
+        $success = $userModel->save();
+        if (!$success) {
+            $this->sendMessages($userModel->getMessages());
+            return;
+        }
+
+        $this->sendJsonResponse([]);
+    }
 }

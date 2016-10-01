@@ -20,5 +20,10 @@ $router->addGet('/user', [
     'controller' => 'user',
     'action'     => 'get',
 ]);
+$router->addPost('/user', [
+    'module'     => 'backend',
+    'controller' => 'user',
+    'action'     => 'post',
+]);
 
 return $router;

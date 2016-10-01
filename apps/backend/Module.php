@@ -16,6 +16,8 @@ class Module implements ModuleDefinitionInterface
         $loader->registerNamespaces([
             'Multi\Backend\Controllers' => APP_PATH . '/backend/controllers/',
             'Multi\Backend\Models'      => APP_PATH . '/backend/models',
+            'Multi\Backend\Validations' => APP_PATH . '/backend/validations/',
+            'Multi\Backend\Validators'  => APP_PATH . '/backend/validators/',
         ]);
         $loader->register();
     }
