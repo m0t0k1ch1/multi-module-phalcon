@@ -6,6 +6,10 @@ class SignupValidation extends \Phalcon\Validation
 {
     public function initialize()
     {
+        $this->setFilters('name', [
+            'trim',
+            'string',
+        ]);
         $this->add(
             'name',
             new \Phalcon\Validation\Validator\PresenceOf([
@@ -13,6 +17,10 @@ class SignupValidation extends \Phalcon\Validation
             ])
         );
 
+        $this->setFilters('email', [
+            'trim',
+            'string',
+        ]);
         $this->add(
             'email',
             new \Phalcon\Validation\Validator\PresenceOf([
