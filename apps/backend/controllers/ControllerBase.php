@@ -24,6 +24,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
         $response = new \Phalcon\Http\Response;
         $response->setStatusCode($statusCode);
         $response->setJsonContent($body);
-        $response->send();
+
+        $this->di->set('response', $response);
     }
 }

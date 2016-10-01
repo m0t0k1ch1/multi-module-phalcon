@@ -38,7 +38,7 @@ class Module implements ModuleDefinitionInterface
         });
 
         $di->setShared('db', function() use($config) {
-            $dbConfig = $config->database->toArray();
+            $dbConfig = $config->database->app->toArray();
             $dbClass  = '\Phalcon\Db\Adapter\Pdo\\' . $dbConfig['adapter'];
             unset($dbConfig['adapter']);
             return new $dbClass($dbConfig);
